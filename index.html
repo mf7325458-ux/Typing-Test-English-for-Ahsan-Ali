@@ -1,0 +1,797 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TypePro — Professional Typing Test</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 20%, #263c68 0, transparent 30%),
+      radial-gradient(circle at 85% 80%, #3b205d 0, transparent 30%),
+      #080b14;
+    color:#fff;
+}
+
+/* NAVBAR */
+.navbar{
+    height:75px;
+    padding:0 7%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:rgba(8,11,20,.72);
+    backdrop-filter:blur(20px);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.logo span{
+    color:#62e6ff;
+}
+
+.nav-links{
+    display:flex;
+    gap:28px;
+    list-style:none;
+}
+
+.nav-links a{
+    color:#b9c1d4;
+    text-decoration:none;
+    font-size:14px;
+    transition:.3s;
+}
+
+.nav-links a:hover{
+    color:#62e6ff;
+}
+
+/* HERO */
+.hero{
+    text-align:center;
+    padding:65px 20px 35px;
+}
+
+.badge{
+    display:inline-block;
+    padding:8px 16px;
+    border:1px solid rgba(98,230,255,.3);
+    border-radius:30px;
+    color:#62e6ff;
+    background:rgba(98,230,255,.07);
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.hero h1{
+    font-size:clamp(38px,6vw,72px);
+    line-height:1;
+    letter-spacing:-3px;
+}
+
+.hero h1 span{
+    color:#62e6ff;
+}
+
+.hero p{
+    color:#9ca7bd;
+    max-width:650px;
+    margin:20px auto 0;
+    line-height:1.7;
+}
+
+/* STATS */
+.stats{
+    width:min(1100px,92%);
+    margin:20px auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.stat{
+    background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    padding:20px;
+    text-align:center;
+    backdrop-filter:blur(15px);
+}
+
+.stat small{
+    color:#8994aa;
+    display:block;
+    margin-bottom:7px;
+}
+
+.stat strong{
+    font-size:28px;
+    color:#fff;
+}
+
+/* MAIN CARD */
+.test-container{
+    width:min(1100px,92%);
+    margin:30px auto 80px;
+}
+
+.test-card{
+    background:rgba(255,255,255,.055);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:28px;
+    padding:30px;
+    box-shadow:0 25px 80px rgba(0,0,0,.35);
+    backdrop-filter:blur(25px);
+}
+
+/* TOP BAR */
+.test-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.test-title h2{
+    font-size:22px;
+}
+
+.test-title p{
+    color:#8994aa;
+    font-size:13px;
+    margin-top:5px;
+}
+
+.timer{
+    min-width:110px;
+    text-align:center;
+    padding:13px 18px;
+    border-radius:14px;
+    background:rgba(98,230,255,.08);
+    border:1px solid rgba(98,230,255,.2);
+}
+
+.timer span{
+    color:#62e6ff;
+    font-size:25px;
+    font-weight:800;
+}
+
+/* PROGRESS */
+.progress{
+    height:5px;
+    background:#1b2232;
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:25px;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:#62e6ff;
+    transition:.2s;
+}
+
+/* TEXT */
+.text-box{
+    background:#0d1220;
+    border:1px solid #202a3e;
+    border-radius:20px;
+    padding:27px;
+    font-size:20px;
+    line-height:2;
+    color:#78849b;
+    min-height:190px;
+    user-select:none;
+}
+
+.word{
+    transition:.1s;
+}
+
+.word.current{
+    background:rgba(98,230,255,.14);
+    color:#fff;
+    border-radius:4px;
+}
+
+.word.correct{
+    color:#64e6a4;
+}
+
+.word.wrong{
+    color:#ff6b8a;
+    text-decoration:underline;
+}
+
+/* INPUT */
+#input{
+    width:100%;
+    margin-top:18px;
+    min-height:125px;
+    resize:none;
+    background:#0a0e18;
+    border:1px solid #263249;
+    outline:none;
+    border-radius:18px;
+    padding:20px;
+    color:#fff;
+    font-size:18px;
+    line-height:1.7;
+    transition:.3s;
+}
+
+#input:focus{
+    border-color:#62e6ff;
+    box-shadow:0 0 0 4px rgba(98,230,255,.06);
+}
+
+#input:disabled{
+    opacity:.6;
+}
+
+/* BUTTONS */
+.buttons{
+    display:flex;
+    gap:12px;
+    margin-top:18px;
+    flex-wrap:wrap;
+}
+
+button{
+    border:none;
+    cursor:pointer;
+    padding:13px 22px;
+    border-radius:12px;
+    font-weight:700;
+    transition:.25s;
+}
+
+.start{
+    background:#62e6ff;
+    color:#071018;
+}
+
+.start:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 30px rgba(98,230,255,.2);
+}
+
+.restart{
+    background:#1a2232;
+    color:#dce5f5;
+    border:1px solid #2a364d;
+}
+
+.restart:hover{
+    background:#222d42;
+}
+
+/* RESULT */
+.result{
+    display:none;
+    margin-top:25px;
+    padding:28px;
+    border-radius:20px;
+    background:linear-gradient(135deg,rgba(98,230,255,.1),rgba(170,91,255,.08));
+    border:1px solid rgba(98,230,255,.2);
+}
+
+.result.show{
+    display:block;
+    animation:appear .5s ease;
+}
+
+@keyframes appear{
+    from{opacity:0;transform:translateY(15px)}
+    to{opacity:1;transform:translateY(0)}
+}
+
+.result h2{
+    margin-bottom:20px;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.result-item{
+    background:rgba(0,0,0,.18);
+    padding:18px;
+    border-radius:15px;
+    text-align:center;
+}
+
+.result-item small{
+    color:#8994aa;
+    display:block;
+    margin-bottom:7px;
+}
+
+.result-item strong{
+    font-size:26px;
+}
+
+/* FOOTER */
+footer{
+    text-align:center;
+    padding:30px;
+    color:#68748a;
+    border-top:1px solid rgba(255,255,255,.06);
+    font-size:13px;
+}
+
+/* MOBILE */
+@media(max-width:750px){
+    .navbar{
+        padding:0 5%;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .hero{
+        padding-top:45px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .test-card{
+        padding:18px;
+    }
+
+    .test-top{
+        align-items:flex-start;
+        gap:15px;
+    }
+
+    .text-box{
+        font-size:17px;
+        padding:20px;
+    }
+
+    .result-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">Type<span>Pro</span></div>
+
+    <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#test">Typing Test</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#about">About</a></li>
+    </ul>
+</nav>
+
+
+<!-- HERO -->
+<section class="hero">
+    <div class="badge">⚡ PROFESSIONAL TYPING TEST</div>
+
+    <h1>Test Your <span>Typing Speed</span></h1>
+
+    <p>
+        Challenge yourself with a professional 5-minute typing test.
+        Improve your speed, accuracy and typing skills.
+    </p>
+</section>
+
+
+<!-- LIVE STATS -->
+<section class="stats">
+
+    <div class="stat">
+        <small>WPM</small>
+        <strong id="wpm">0</strong>
+    </div>
+
+    <div class="stat">
+        <small>Accuracy</small>
+        <strong id="accuracy">100%</strong>
+    </div>
+
+    <div class="stat">
+        <small>Errors</small>
+        <strong id="errors">0</strong>
+    </div>
+
+    <div class="stat">
+        <small>Characters</small>
+        <strong id="characters">0</strong>
+    </div>
+
+</section>
+
+
+<!-- TEST -->
+<main class="test-container" id="test">
+
+<div class="test-card">
+
+    <div class="test-top">
+
+        <div class="test-title">
+            <h2>5 Minute Typing Challenge</h2>
+            <p>Click START and begin typing the text below.</p>
+        </div>
+
+        <div class="timer">
+            <span id="timer">05:00</span>
+        </div>
+
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+
+    <!-- PASSAGE -->
+    <div class="text-box" id="textBox"></div>
+
+
+    <!-- INPUT -->
+    <textarea
+        id="input"
+        placeholder="Start typing here..."
+        disabled
+        spellcheck="false">
+    </textarea>
+
+
+    <div class="buttons">
+        <button class="start" id="startBtn">▶ Start Test</button>
+        <button class="restart" id="restartBtn">↻ Restart</button>
+    </div>
+
+
+    <!-- RESULT -->
+    <div class="result" id="result">
+
+        <h2>🏆 Your Test Result</h2>
+
+        <div class="result-grid">
+
+            <div class="result-item">
+                <small>WPM</small>
+                <strong id="finalWpm">0</strong>
+            </div>
+
+            <div class="result-item">
+                <small>Accuracy</small>
+                <strong id="finalAccuracy">0%</strong>
+            </div>
+
+            <div class="result-item">
+                <small>Errors</small>
+                <strong id="finalErrors">0</strong>
+            </div>
+
+            <div class="result-item">
+                <small>Characters</small>
+                <strong id="finalChars">0</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+</main>
+
+
+<footer id="about">
+    © 2026 TypePro — Professional Typing Practice Platform
+</footer>
+
+
+<script>
+
+const passages = [
+
+`Success does not come from waiting for the perfect moment. It comes from taking action and learning from every experience. When you practice something every day, your skills become stronger and your confidence grows. Small improvements may look simple at first, but they can create powerful results over time.`,
+
+`Technology has changed the way people learn, communicate and work. Computers and the internet provide many opportunities for students and professionals. Learning useful digital skills can help you solve problems, create projects and discover new career opportunities in the modern world.`,
+
+`A successful person understands that mistakes are part of learning. Instead of giving up after failure, they look at what went wrong and try again. Patience, consistency and hard work can turn a difficult challenge into an achievable goal.`,
+
+`The ability to type quickly and accurately is useful for students, developers, writers and office professionals. Regular typing practice improves keyboard familiarity, reduces mistakes and allows you to focus more on the ideas you want to communicate.`
+
+];
+
+let passage = "";
+let startTime = null;
+let timerInterval = null;
+let timeLeft = 300;
+let running = false;
+
+const textBox = document.getElementById("textBox");
+const input = document.getElementById("input");
+
+const timer = document.getElementById("timer");
+const wpm = document.getElementById("wpm");
+const accuracy = document.getElementById("accuracy");
+const errors = document.getElementById("errors");
+const characters = document.getElementById("characters");
+
+const progress = document.getElementById("progress");
+
+const startBtn = document.getElementById("startBtn");
+const restartBtn = document.getElementById("restartBtn");
+
+const result = document.getElementById("result");
+
+const finalWpm = document.getElementById("finalWpm");
+const finalAccuracy = document.getElementById("finalAccuracy");
+const finalErrors = document.getElementById("finalErrors");
+const finalChars = document.getElementById("finalChars");
+
+
+function choosePassage(){
+
+    passage = passages[Math.floor(Math.random()*passages.length)];
+
+    textBox.innerHTML = "";
+
+    passage.split(" ").forEach((word,index)=>{
+
+        const span = document.createElement("span");
+
+        span.className = "word";
+        span.textContent = word + " ";
+
+        if(index === 0){
+            span.classList.add("current");
+        }
+
+        textBox.appendChild(span);
+    });
+}
+
+
+function reset(){
+
+    clearInterval(timerInterval);
+
+    running = false;
+    startTime = null;
+    timeLeft = 300;
+
+    timer.textContent = "05:00";
+
+    input.value = "";
+    input.disabled = true;
+
+    wpm.textContent = "0";
+    accuracy.textContent = "100%";
+    errors.textContent = "0";
+    characters.textContent = "0";
+
+    progress.style.width = "0%";
+
+    result.classList.remove("show");
+
+    startBtn.disabled = false;
+
+    choosePassage();
+}
+
+
+function startTest(){
+
+    if(running) return;
+
+    reset();
+
+    running = true;
+    startTime = Date.now();
+
+    input.disabled = false;
+    input.focus();
+
+    startBtn.disabled = true;
+
+    timerInterval = setInterval(updateTimer,1000);
+}
+
+
+function updateTimer(){
+
+    timeLeft--;
+
+    const minutes = Math.floor(timeLeft/60);
+    const seconds = timeLeft % 60;
+
+    timer.textContent =
+        String(minutes).padStart(2,"0") +
+        ":" +
+        String(seconds).padStart(2,"0");
+
+    progress.style.width =
+        ((300-timeLeft)/300*100) + "%";
+
+    if(timeLeft <= 0){
+
+        finishTest();
+    }
+}
+
+
+function updateStats(){
+
+    const typed = input.value;
+
+    const elapsedSeconds =
+        Math.max(1,(Date.now()-startTime)/1000);
+
+    const wordsTyped =
+        typed.trim().length === 0
+        ? 0
+        : typed.trim().split(/\s+/).length;
+
+    const currentWpm =
+        Math.round(wordsTyped/(elapsedSeconds/60));
+
+    let correct = 0;
+    let mistake = 0;
+
+    for(let i=0;i<typed.length;i++){
+
+        if(typed[i] === passage[i]){
+            correct++;
+        }else{
+            mistake++;
+        }
+    }
+
+    const acc =
+        typed.length === 0
+        ? 100
+        : Math.max(0,Math.round(correct/typed.length*100));
+
+    wpm.textContent = currentWpm;
+    accuracy.textContent = acc + "%";
+    errors.textContent = mistake;
+    characters.textContent = typed.length;
+
+    updateTextDisplay();
+}
+
+
+function updateTextDisplay(){
+
+    const typed = input.value;
+    const words = textBox.querySelectorAll(".word");
+
+    words.forEach((word,index)=>{
+
+        const targetWords = passage.split(" ");
+        const typedWords = typed.split(" ");
+
+        word.classList.remove("current","correct","wrong");
+
+        if(index < typedWords.length){
+
+            if(typedWords[index] === targetWords[index]){
+                word.classList.add("correct");
+            }else{
+                word.classList.add("wrong");
+            }
+
+        }else if(index === typedWords.length){
+
+            word.classList.add("current");
+        }
+
+    });
+}
+
+
+function finishTest(){
+
+    clearInterval(timerInterval);
+
+    running = false;
+
+    input.disabled = true;
+    startBtn.disabled = false;
+
+    updateStats();
+
+    finalWpm.textContent = wpm.textContent;
+    finalAccuracy.textContent = accuracy.textContent;
+    finalErrors.textContent = errors.textContent;
+    finalChars.textContent = characters.textContent;
+
+    result.classList.add("show");
+
+    result.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+}
+
+
+input.addEventListener("input",()=>{
+
+    if(!running) return;
+
+    updateStats();
+
+    if(input.value.length >= passage.length){
+
+        finishTest();
+    }
+
+});
+
+
+startBtn.addEventListener("click",startTest);
+
+restartBtn.addEventListener("click",()=>{
+
+    reset();
+
+    window.scrollTo({
+        top:document.getElementById("test").offsetTop-80,
+        behavior:"smooth"
+    });
+
+});
+
+
+document.addEventListener("keydown",(e)=>{
+
+    if(e.key === "Tab"){
+
+        e.preventDefault();
+
+        if(!running){
+            startTest();
+        }
+    }
+
+});
+
+
+reset();
+
+</script>
+
+</body>
+</html>
+```
